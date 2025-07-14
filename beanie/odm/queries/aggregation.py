@@ -10,7 +10,7 @@ from typing import (
 )
 
 from pydantic import BaseModel
-from pymongo.asynchronous.command_cursor import AsyncCommandCursor
+from async_pymongo.command_cursor import AsyncCommandCursor
 
 from beanie.odm.cache import LRUCache
 from beanie.odm.interfaces.clone import CloneInterface
@@ -97,7 +97,7 @@ class AggregationQuery(
 
     async def get_cursor(self) -> AsyncCommandCursor:
         aggregation_pipeline = self.get_aggregation_pipeline()
-        return await self.document_model.get_pymongo_collection().aggregate(
+        return await self.document_model.get_async_pymongo_collection().aggregate(
             aggregation_pipeline, session=self.session, **self.pymongo_kwargs
         )
 

@@ -1,5 +1,5 @@
 import pytest
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 from beanie.odm.utils.pydantic import IS_PYDANTIC_V2
 
@@ -21,7 +21,7 @@ def settings():
 
 @pytest.fixture
 async def cli(settings):
-    client = AsyncMongoClient(settings.mongodb_dsn)
+    client = AsyncClient(settings.mongodb_dsn)
 
     yield client
 

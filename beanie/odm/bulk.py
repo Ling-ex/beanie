@@ -11,7 +11,7 @@ from pymongo import (
     UpdateMany,
     UpdateOne,
 )
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 from pymongo.results import BulkWriteResult
 
 if TYPE_CHECKING:
@@ -38,7 +38,7 @@ class BulkWriter:
 
     Attributes:
         session Optional[AsyncClientSession]:
-            The pymongo session used for transactional operations.
+            The async_pymongo session used for transactional operations.
             Defaults to None, meaning no session is used.
         ordered Optional[bool]:
             Specifies whether operations are executed sequentially (default) or in parallel.

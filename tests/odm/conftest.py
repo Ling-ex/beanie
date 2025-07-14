@@ -324,8 +324,8 @@ async def deprecated_init_beanie(db, recwarn_always):
     yield
 
     for model in TESTING_MODELS:
-        await model.get_pymongo_collection().drop()
-        await model.get_pymongo_collection().drop_indexes()
+        await model.get_async_pymongo_collection().drop()
+        await model.get_async_pymongo_collection().drop_indexes()
 
 
 @pytest.fixture(autouse=True)
@@ -338,8 +338,8 @@ async def init(db):
     yield
 
     for model in TESTING_MODELS:
-        await model.get_pymongo_collection().drop()
-        await model.get_pymongo_collection().drop_indexes()
+        await model.get_async_pymongo_collection().drop()
+        await model.get_async_pymongo_collection().drop_indexes()
 
 
 @pytest.fixture

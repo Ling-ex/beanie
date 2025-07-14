@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 from beanie import init_beanie
 from tests.conftest import Settings
@@ -19,7 +19,7 @@ from tests.fastapi.routes import house_router
 @asynccontextmanager
 async def live_span(_: FastAPI):
     # CREATE ASYNC PYMONGO CLIENT
-    client = AsyncMongoClient(Settings().mongodb_dsn)
+    client = AsyncClient(Settings().mongodb_dsn)
 
     # INIT BEANIE
     await init_beanie(

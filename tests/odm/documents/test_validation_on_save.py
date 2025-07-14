@@ -51,7 +51,7 @@ async def test_validate_on_save_keep_the_id_type():
     doc.num_2 = 1000
     await doc.save()
     in_db = (
-        await DocumentWithValidationOnSave.get_pymongo_collection().find_one(
+        await DocumentWithValidationOnSave.get_async_pymongo_collection().find_one(
             {"_id": doc.id}
         )
     )

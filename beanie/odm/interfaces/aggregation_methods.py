@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Any, Dict, List, Optional, Union, cast
 
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 
 from beanie.odm.fields import ExpressionField
 
@@ -42,7 +42,7 @@ class AggregateMethods:
         ```
 
         :param field: Union[str, ExpressionField]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param ignore_cache: bool
         :return: float - sum. None if there are no items.
         """
@@ -85,7 +85,7 @@ class AggregateMethods:
         ```
 
         :param field: Union[str, ExpressionField]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param ignore_cache: bool
         :return: Optional[float] - avg. None if there are no items.
         """
@@ -127,7 +127,7 @@ class AggregateMethods:
         ```
 
         :param field: Union[str, ExpressionField]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: float - max. None if there are no items.
         """
         pipeline = [
@@ -168,7 +168,7 @@ class AggregateMethods:
         ```
 
         :param field: Union[str, ExpressionField]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: float - min. None if there are no items.
         """
         pipeline = [

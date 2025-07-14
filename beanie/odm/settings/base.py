@@ -2,8 +2,8 @@ from datetime import timedelta
 from typing import Any, Dict, Optional, Type
 
 from pydantic import BaseModel, Field
-from pymongo.asynchronous.collection import AsyncCollection
-from pymongo.asynchronous.database import AsyncDatabase
+from async_pymongo.collection import AsyncCollection
+from async_pymongo.db import AsyncDatabase
 
 from beanie.odm.utils.pydantic import IS_PYDANTIC_V2
 
@@ -20,8 +20,8 @@ class ItemSettings(BaseModel):
     bson_encoders: Dict[Any, Any] = Field(default_factory=dict)
     projection: Optional[Dict[str, Any]] = None
 
-    pymongo_db: Optional[AsyncDatabase] = None
-    pymongo_collection: Optional[AsyncCollection] = None
+    async_pymongo_db: Optional[AsyncDatabase] = None
+    async_pymongo_collection: Optional[AsyncCollection] = None
 
     union_doc: Optional[Type] = None
     union_doc_alias: Optional[str] = None

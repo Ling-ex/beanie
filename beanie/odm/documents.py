@@ -31,7 +31,7 @@ from pydantic import (
 from pydantic.class_validators import root_validator
 from pydantic.main import BaseModel
 from pymongo import InsertOne
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 from pymongo.errors import DuplicateKeyError
 from pymongo.results import (
     DeleteResult,
@@ -206,7 +206,7 @@ class Document(
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(Document, self).__init__(*args, **kwargs)
-        self.get_pymongo_collection()
+        self.get_async_pymongo_collection()
 
     @classmethod
     def _fill_back_refs(cls, values):
@@ -260,7 +260,7 @@ class Document(
         Get document by id, returns None if document does not exist
 
         :param document_id: PydanticObjectId - document id
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param ignore_cache: bool - ignore cache (if it is turned on)
         :param **pymongo_kwargs: pymongo native parameters for find operation
         :return: Union["Document", None]
@@ -332,7 +332,7 @@ class Document(
         """
         Insert the document (self) to the collection
         :param link_rule: WriteRules - if "WriteRules.WRITE", it will insert Link Documents to db.
-        :param session: AsyncClientSession - pymongo session
+        :param session: AsyncClientSession - async_pymongo session
         :return: self
         """
         if self.get_settings().use_revision:
@@ -365,7 +365,7 @@ class Document(
                                     if isinstance(obj, Document)
                                 ]
                             )
-        result = await self.get_pymongo_collection().insert_one(
+        result = await self.get_async_pymongo_collection().insert_one(
             get_dict(
                 self, to_db=True, keep_nulls=self.get_settings().keep_nulls
             ),
@@ -403,7 +403,7 @@ class Document(
         """
         Insert one document to the collection
         :param document: Document - document to insert
-        :param session: AsyncClientSession - pymongo session
+        :param session: AsyncClientSession - async_pymongo session
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param link_rule: InsertRules - hot to manage link fields
         :return: DocType
@@ -459,7 +459,7 @@ class Document(
             )
             for document in documents
         ]
-        return await cls.get_pymongo_collection().insert_many(
+        return await cls.get_async_pymongo_collection().insert_many(
             documents_list, session=session, **pymongo_kwargs
         )
 
@@ -477,7 +477,7 @@ class Document(
         """
         Fully update the document in the database
 
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
         :param ignore_revision: bool - do force replace.
             Used when revision based protection is turned on.
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
@@ -560,7 +560,7 @@ class Document(
         Update an existing model in the database or
         insert it if it does not yet exist.
 
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
         :param link_rule: WriteRules - rules how to deal with links on writing
         :param ignore_revision: bool - do force save.
         :return: self
@@ -674,7 +674,7 @@ class Document(
         Replace list of documents
 
         :param documents: List["Document"]
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
         :return: None
         """
         ids_list = [document.id for document in documents]
@@ -704,7 +704,7 @@ class Document(
         Partially update the document in the database
 
         :param args: *Union[dict, Mapping] - the modifications to apply.
-        :param session: AsyncClientSession - pymongo session.
+        :param session: AsyncClientSession - async_pymongo session.
         :param ignore_revision: bool - force update. Will update even if revision id is not the same, as stored
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param pymongo_kwargs: pymongo native parameters for update operation
@@ -757,7 +757,7 @@ class Document(
         Partially update all the documents
 
         :param args: *Union[dict, Mapping] - the modifications to apply.
-        :param session: AsyncClientSession - pymongo session.
+        :param session: AsyncClientSession - async_pymongo session.
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param **pymongo_kwargs: pymongo native parameters for find operation
         :return: UpdateMany query
@@ -792,7 +792,7 @@ class Document(
 
         :param expression: Dict[Union[ExpressionField, str, Any], Any] - keys and
         values to set
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - bulk writer
         :param skip_sync: bool - skip doc syncing. Available for the direct instances only
         :return: self
@@ -819,7 +819,7 @@ class Document(
         Uses [CurrentDate operator](operators/update.md#currentdate)
 
         :param expression: Dict[Union[datetime, ExpressionField, str], Any]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - bulk writer
         :param skip_sync: bool - skip doc syncing. Available for the direct instances only
         :return: self
@@ -857,7 +857,7 @@ class Document(
         Uses [Inc operator](operators/update.md#inc)
 
         :param expression: Dict[Union[ExpressionField, float, int, str], Any]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - bulk writer
         :param skip_sync: bool - skip doc syncing. Available for the direct instances only
         :return: self
@@ -882,7 +882,7 @@ class Document(
         """
         Delete the document
 
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param link_rule: DeleteRules - rules for link fields
         :param **pymongo_kwargs: pymongo native parameters for delete operation
@@ -937,7 +937,7 @@ class Document(
         """
         Delete all the documents
 
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param **pymongo_kwargs: pymongo native parameters for delete operation
         :return: Optional[DeleteResult] - pymongo DeleteResult instance.
@@ -1228,7 +1228,7 @@ class Document(
         """
         Returns a BulkWriter instance for handling bulk write operations.
 
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
             The session instance used for transactional operations.
         :param ordered: bool
             If ``True`` (the default), requests will be performed on the server serially, in the order provided. If an error

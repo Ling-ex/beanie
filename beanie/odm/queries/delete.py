@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Dict, Generator, Mapping, Optional, Type
 
 from pymongo import DeleteMany as DeleteManyPyMongo
 from pymongo import DeleteOne as DeleteOnePyMongo
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 from pymongo.results import DeleteResult
 
 from beanie.odm.bulk import BulkWriter
@@ -42,7 +42,7 @@ class DeleteMany(DeleteQuery):
         """
         if self.bulk_writer is None:
             return (
-                yield from self.document_model.get_pymongo_collection()
+                yield from self.document_model.get_async_pymongo_collection()
                 .delete_many(
                     self.find_query,
                     session=self.session,
@@ -68,7 +68,7 @@ class DeleteOne(DeleteQuery):
         """
         if self.bulk_writer is None:
             return (
-                yield from self.document_model.get_pymongo_collection()
+                yield from self.document_model.get_async_pymongo_collection()
                 .delete_one(
                     self.find_query,
                     session=self.session,

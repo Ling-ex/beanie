@@ -4,8 +4,8 @@ from importlib.machinery import SourceFileLoader
 from pathlib import Path
 from typing import List, Optional, Type
 
-from pymongo.asynchronous.client_session import AsyncClientSession
-from pymongo.asynchronous.database import AsyncDatabase
+from async_pymongo.client_session import AsyncClientSession
+from async_pymongo.db import AsyncDatabase
 
 from beanie.migrations.controllers.iterative import BaseMigrationController
 from beanie.migrations.database import DBHandler

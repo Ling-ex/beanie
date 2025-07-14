@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from pymongo.asynchronous.collection import AsyncCollection
+from async_pymongo.collection import AsyncCollection
 
 from beanie.odm.settings.base import ItemSettings
 
@@ -12,8 +12,8 @@ class OtherGettersInterface:
         pass
 
     @classmethod
-    def get_pymongo_collection(cls) -> AsyncCollection:
-        return cls.get_settings().pymongo_collection
+    def get_async_pymongo_collection(cls) -> AsyncCollection:
+        return cls.get_settings().async_pymongo_collection
 
     @classmethod
     def get_collection_name(cls) -> str:

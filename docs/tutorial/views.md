@@ -41,14 +41,14 @@ class Metrics(View):
 Initialize Beanie:
 
 ```python
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 from beanie import init_beanie
 
 
 async def main():
     uri = "mongodb://beanie:beanie@localhost:27017"
-    client = AsyncMongoClient(uri)
+    client = AsyncClient(uri)
     db = client.bikes
 
     await init_beanie(

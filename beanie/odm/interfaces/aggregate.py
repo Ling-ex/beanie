@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Any, Dict, Optional, Type, TypeVar, Union, overload
 
 from pydantic import BaseModel
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 
 from beanie.odm.queries.aggregation import AggregationQuery
 from beanie.odm.queries.find import FindMany
@@ -56,7 +56,7 @@ class AggregateInterface:
         Returns [AggregationQuery](query.md#aggregationquery) query object
         :param aggregation_pipeline: list - aggregation pipeline
         :param projection_model: Type[BaseModel]
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
         :param ignore_cache: bool
         :param **pymongo_kwargs: pymongo native parameters for aggregate operation
         :return: [AggregationQuery](query.md#aggregationquery)

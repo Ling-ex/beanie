@@ -1,6 +1,7 @@
 import sys
 
-from pymongo.asynchronous.database import AsyncDatabase
+from async_pymongo import AsyncClient
+from async_pymongo.db import AsyncDatabase
 from typing_extensions import Sequence, get_args, get_origin
 
 from beanie.odm.utils.pydantic import (
@@ -28,7 +29,7 @@ from typing import (  # type: ignore
 
 from pydantic import BaseModel
 from pydantic.fields import FieldInfo
-from pymongo import AsyncMongoClient, IndexModel
+from pymongo import IndexModel
 
 from beanie.exceptions import Deprecation, MongoDBVersionError
 from beanie.odm.actions import ActionRegistry
@@ -72,7 +73,7 @@ class Initializer:
         """
         Beanie initializer
 
-        :param database: AsyncDatabase - pymongo database instance
+        :param database: AsyncDatabase - async_pymongo database instance
         :param connection_string: str - MongoDB connection string
         :param document_models: List[Union[Type[DocType], Type[UnionDocType], str]] - model classes
         or strings with dot separated paths
@@ -101,7 +102,7 @@ class Initializer:
         if document_models is None:
             raise ValueError("document_models parameter must be set")
         if connection_string is not None:
-            database = AsyncMongoClient(
+            database = AsyncClient(
                 connection_string
             ).get_default_database()
 
@@ -468,7 +469,7 @@ class Initializer:
                 "Timeseries are supported by MongoDB version 5 and higher"
             )
 
-        # create pymongo collection
+        # create async_pymongo collection
         if (
             document_settings.timeseries is not None
             and document_settings.name
@@ -490,12 +491,12 @@ class Initializer:
         """
         Async indexes initializer
         """
-        collection = cls.get_pymongo_collection()
+        collection = cls.get_async_pymongo_collection()
         document_settings = cls.get_settings()
 
         index_information = await collection.index_information()
 
-        old_indexes = IndexModelField.from_pymongo_index_information(
+        old_indexes = IndexModelField.from_async_pymongo_index_information(
             index_information
         )
         new_indexes = []
@@ -666,8 +667,8 @@ class Initializer:
         if inspect.isclass(view_settings.source):
             view_settings.source = view_settings.source.get_collection_name()
 
-        view_settings.pymongo_db = self.database
-        view_settings.pymongo_collection = self.database[view_settings.name]
+        view_settings.async_pymongo_db = self.database
+        view_settings.async_pymongo_collection = self.database[view_settings.name]
 
     async def init_view(self, cls: Type[View]):
         """
@@ -686,7 +687,7 @@ class Initializer:
         )
         if self.recreate_views or cls._settings.name not in collection_names:
             if cls._settings.name in collection_names:
-                await cls.get_pymongo_collection().drop()
+                await cls.get_async_pymongo_collection().drop()
 
             await self.database.command(
                 {
@@ -709,8 +710,8 @@ class Initializer:
         if cls._settings.name is None:
             cls._settings.name = cls.__name__
 
-        cls._settings.pymongo_db = self.database
-        cls._settings.pymongo_collection = self.database[cls._settings.name]
+        cls._settings.async_pymongo_db = self.database
+        cls._settings.async_pymongo_collection = self.database[cls._settings.name]
         cls._is_inited = True
 
     # Deprecations
@@ -765,7 +766,7 @@ async def init_beanie(
     """
     Beanie initialization
 
-    :param database: Optional[AsyncDatabase] - pymongo database instance. Defaults to None.
+    :param database: Optional[AsyncDatabase] - async_pymongo database instance. Defaults to None.
     :param connection_string: Optional[str] - MongoDB connection string.  Defaults to None.
     :param document_models: List[Union[Type[DocType], Type[UnionDocType], str]] - model classes
         or strings with dot separated paths. Defaults to None.

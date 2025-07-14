@@ -1,6 +1,6 @@
 from typing import Any, ClassVar, Dict, Optional, Type, TypeVar
 
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 
 from beanie.exceptions import UnionDocNotInited
 from beanie.odm.bulk import BulkWriter
@@ -53,7 +53,7 @@ class UnionDoc(
         """
         Returns a BulkWriter instance for handling bulk write operations.
 
-        :param session: Optional[AsyncClientSession] - pymongo session.
+        :param session: Optional[AsyncClientSession] - async_pymongo session.
             The session instance used for transactional operations.
         :param ordered: bool
             If ``True`` (the default), requests will be performed on the server serially, in the order provided. If an error

@@ -18,7 +18,7 @@ poetry add beanie
 
 ### Optional dependencies
 
-Beanie supports some optional dependencies from PyMongo (`pip` or `poetry` can be used).
+Beanie supports some optional dependencies from Async PyMongo (`pip` or `poetry` can be used).
 
 GSSAPI authentication requires `gssapi` extra dependency:
 
@@ -78,14 +78,14 @@ Getting Beanie setup in your code is really easy:
 
 1.  Write your database model as a Pydantic class but use `beanie.Document` instead of `pydantic.BaseModel`.
 2.  Initialize Async PyMongo, as Beanie uses this as an async database engine under the hood.
-3.  Call `beanie.init_beanie` with the PyMongo client and list of Beanie models
+3.  Call `beanie.init_beanie` with the Async PyMongo client and list of Beanie models
 
 The code below should get you started and shows some of the field types that you can use with beanie.
 
 ```python
 from typing import Optional
 
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 from pydantic import BaseModel
 
 from beanie import Document, Indexed, init_beanie
@@ -107,7 +107,7 @@ class Product(Document):
 # Call this from within your event loop to get beanie setup.
 async def init():
     # Create Async PyMongo client
-    client = AsyncMongoClient("mongodb://user:pass@host:27017")
+    client = AsyncClient("mongodb://user:pass@host:27017")
 
     # Init beanie with the Product document class
     await init_beanie(database=client.db_name, document_models=[Product])

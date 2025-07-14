@@ -19,7 +19,7 @@ from typing import (
 
 from pydantic import BaseModel
 from pymongo import ReplaceOne
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 from pymongo.results import UpdateResult
 
 from beanie.exceptions import DocumentNotFound
@@ -118,7 +118,7 @@ class FindQuery(
         """
         Provide search criteria to the Delete query
 
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: Union[DeleteOne, DeleteMany]
         """
         self.set_session(session=session)
@@ -154,7 +154,7 @@ class FindQuery(
             if self.skip_number:
                 kwargs["skip"] = self.skip_number
         return (
-            await self.document_model.get_pymongo_collection().count_documents(
+            await self.document_model.get_async_pymongo_collection().count_documents(
                 self.get_filter_query(), session=self.session, **kwargs
             )
         )
@@ -247,7 +247,7 @@ class FindMany(
         or a list of (key, direction) pairs specifying the sort order
         for this query.
         :param projection_model: Optional[Type[BaseModel]] - projection model
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param ignore_cache: bool
         :param **pymongo_kwargs: pymongo native parameters for find operation (if Document class contains links, this parameter must fit the respective parameter of the aggregate MongoDB function)
         :return: FindMany - query instance
@@ -438,7 +438,7 @@ class FindMany(
         and provide search criteria there
 
         :param args: *Mapping[str,Any] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter]
         :return: UpdateMany query
         """
@@ -466,7 +466,7 @@ class FindMany(
         :param args: *Mapping[str,Any] - the modifications to apply.
         :param on_insert: DocType - document to insert if there is no matched
         document in the collection
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: UpdateMany query
         """
         self.set_session(session)
@@ -495,7 +495,7 @@ class FindMany(
         [UpdateMany](query.md#updatemany) query
 
         :param args: *Mapping[str,Any] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: [UpdateMany](query.md#updatemany) query
         """
         return cast(
@@ -517,7 +517,7 @@ class FindMany(
         """
         Provide search criteria to the [DeleteMany](query.md#deletemany) query
 
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: [DeleteMany](query.md#deletemany) query
         """
         # We need to cast here to tell mypy that we are sure about the type.
@@ -567,7 +567,7 @@ class FindMany(
         :param aggregation_pipeline: list - aggregation pipeline. MongoDB doc:
         <https://docs.mongodb.com/manual/core/aggregation-pipeline/>
         :param projection_model: Type[BaseModel] - Projection Model
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param ignore_cache: bool
         :return:[AggregationQuery](query.md#aggregationquery)
         """
@@ -672,14 +672,14 @@ class FindMany(
                 aggregation_pipeline.append({"$project": projection})
 
             return (
-                await self.document_model.get_pymongo_collection().aggregate(
+                await self.document_model.get_async_pymongo_collection().aggregate(
                     aggregation_pipeline,
                     session=self.session,
                     **self.pymongo_kwargs,
                 )
             )
 
-        return self.document_model.get_pymongo_collection().find(
+        return self.document_model.get_async_pymongo_collection().find(
             filter=self.get_filter_query(),
             sort=self.sort_expressions,
             projection=get_projection(self.projection_model),
@@ -712,7 +712,7 @@ class FindMany(
 
             aggregation_pipeline.append({"$count": "count"})
             cursor = (
-                await self.document_model.get_pymongo_collection().aggregate(
+                await self.document_model.get_async_pymongo_collection().aggregate(
                     aggregation_pipeline,
                     session=self.session,
                     **self.pymongo_kwargs,
@@ -806,7 +806,7 @@ class FindOne(FindQuery[FindQueryResultType]):
 
         :param args: *Mapping[Any, Any] - search criteria
         :param projection_model: Optional[Type[BaseModel]] - projection model
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param ignore_cache: bool
         :param **pymongo_kwargs: pymongo native parameters for find operation (if Document class contains links, this parameter must fit the respective parameter of the aggregate MongoDB function)
         :return: FindOne - query instance
@@ -834,7 +834,7 @@ class FindOne(FindQuery[FindQueryResultType]):
         and provide search criteria there
 
         :param args: *Mapping[str,Any] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter]
         :param response_type: Optional[UpdateResponse]
         :return: UpdateMany query
@@ -869,7 +869,7 @@ class FindOne(FindQuery[FindQueryResultType]):
         :param args: *Mapping[str,Any] - the modifications to apply.
         :param on_insert: DocType - document to insert if there is no matched
         document in the collection
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param response_type: Optional[UpdateResponse]
         :return: UpdateMany query
         """
@@ -900,7 +900,7 @@ class FindOne(FindQuery[FindQueryResultType]):
         Create [UpdateOne](query.md#updateone) query using modifications and
         provide search criteria there
         :param args: *Mapping[str,Any] - the modifications to apply
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param response_type: Optional[UpdateResponse]
         :return: [UpdateOne](query.md#updateone) query
         """
@@ -923,7 +923,7 @@ class FindOne(FindQuery[FindQueryResultType]):
     ) -> DeleteOne:
         """
         Provide search criteria to the [DeleteOne](query.md#deleteone) query
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :return: [DeleteOne](query.md#deleteone) query
         """
         # We need to cast here to tell mypy that we are sure about the type.
@@ -945,14 +945,14 @@ class FindOne(FindQuery[FindQueryResultType]):
         """
         Replace found document by provided
         :param document: Document - document, which will replace the found one
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - Beanie bulk writer
         :return: UpdateResult
         """
         self.set_session(session=session)
         if bulk_writer is None:
             result: UpdateResult = (
-                await self.document_model.get_pymongo_collection().replace_one(
+                await self.document_model.get_async_pymongo_collection().replace_one(
                     self.get_filter_query(),
                     get_dict(
                         document,
@@ -994,7 +994,7 @@ class FindOne(FindQuery[FindQueryResultType]):
                 nesting_depths_per_field=self.nesting_depths_per_field,
                 **self.pymongo_kwargs,
             ).first_or_none()
-        return await self.document_model.get_pymongo_collection().find_one(
+        return await self.document_model.get_async_pymongo_collection().find_one(
             filter=self.get_filter_query(),
             projection=get_projection(self.projection_model),
             session=self.session,

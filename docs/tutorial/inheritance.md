@@ -17,7 +17,7 @@ To set the root model you have to set `is_root = True` in the inner Settings cla
 from typing import List, Optional
 
 from pydantic import BaseModel
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 from beanie import Document, Link, init_beanie
 
@@ -71,7 +71,7 @@ class Owner(Document):
 Inserts work the same way as usual
 
 ```python
-client = AsyncMongoClient()
+client = AsyncClient()
 await init_beanie(client.test_db, document_models=[Vehicle, Bicycle, Bike, Car, Bus, Owner])
 
 bike_1 = await Bike(color='black', fuel='gasoline').insert()

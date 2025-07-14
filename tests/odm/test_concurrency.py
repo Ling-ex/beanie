@@ -1,6 +1,6 @@
 import asyncio
 
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 from beanie import Document, init_beanie
 
@@ -20,7 +20,7 @@ class TestConcurrency:
     async def test_without_init(self, settings):
         clients = []
         for _ in range(10):
-            client = AsyncMongoClient(settings.mongodb_dsn)
+            client = AsyncClient(settings.mongodb_dsn)
             clients.append(client)
             db = client[settings.mongodb_db_name]
             await init_beanie(

@@ -16,7 +16,7 @@ from typing import (
 from pymongo import ReturnDocument
 from pymongo import UpdateMany as UpdateManyPyMongo
 from pymongo import UpdateOne as UpdateOnePyMongo
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 from pymongo.results import InsertOneResult, UpdateResult
 
 from beanie.odm.bulk import BulkWriter
@@ -115,7 +115,7 @@ class UpdateMany(UpdateQuery):
         Provide modifications to the update query.
 
         :param args: *Union[dict, Mapping] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter]
         :param pymongo_kwargs: pymongo native parameters for update operation
         :return: UpdateMany query
@@ -140,7 +140,7 @@ class UpdateMany(UpdateQuery):
         :param args: *Union[dict, Mapping] - the modifications to apply.
         :param on_insert: DocType - document to insert if there is no matched
         document in the collection
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param **pymongo_kwargs: pymongo native parameters for update operation
         :return: UpdateMany query
         """
@@ -159,7 +159,7 @@ class UpdateMany(UpdateQuery):
         Provide modifications to the update query
 
         :param args: *Union[dict, Mapping] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param pymongo_kwargs: pymongo native parameters for update operation
         :return: UpdateMany query
@@ -171,7 +171,7 @@ class UpdateMany(UpdateQuery):
     async def _update(self):
         if self.bulk_writer is None:
             return (
-                await self.document_model.get_pymongo_collection().update_many(
+                await self.document_model.get_async_pymongo_collection().update_many(
                     self.find_query,
                     self.update_query,
                     session=self.session,
@@ -233,7 +233,7 @@ class UpdateOne(UpdateQuery):
         Provide modifications to the update query.
 
         :param args: *Union[dict, Mapping] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter]
         :param response_type: UpdateResponse
         :param pymongo_kwargs: pymongo native parameters for update operation
@@ -262,7 +262,7 @@ class UpdateOne(UpdateQuery):
         :param args: *Union[dict, Mapping] - the modifications to apply.
         :param on_insert: DocType - document to insert if there is no matched
         document in the collection
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param response_type: Optional[UpdateResponse]
         :param pymongo_kwargs: pymongo native parameters for update operation
         :return: UpdateMany query
@@ -288,7 +288,7 @@ class UpdateOne(UpdateQuery):
         Provide modifications to the update query. The same as `update()`
 
         :param args: *Union[dict, Mapping] - the modifications to apply.
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: "BulkWriter" - Beanie bulk writer
         :param response_type: Optional[UpdateResponse]
         :param pymongo_kwargs: pymongo native parameters for update operation
@@ -305,14 +305,14 @@ class UpdateOne(UpdateQuery):
     async def _update(self):
         if not self.bulk_writer:
             if self.response_type == UpdateResponse.UPDATE_RESULT:
-                return await self.document_model.get_pymongo_collection().update_one(
+                return await self.document_model.get_async_pymongo_collection().update_one(
                     self.find_query,
                     self.update_query,
                     session=self.session,
                     **self.pymongo_kwargs,
                 )
             else:
-                result = await self.document_model.get_pymongo_collection().find_one_and_update(
+                result = await self.document_model.get_async_pymongo_collection().find_one_and_update(
                     self.find_query,
                     self.update_query,
                     session=self.session,

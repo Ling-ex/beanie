@@ -4,14 +4,14 @@ and a list of your document models to the `init_beanie(...)` function, as it is 
 
 ```python
 from beanie import init_beanie, Document
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 class Sample(Document):
     name: str
 
 async def init():
     # Create Async PyMongo client
-    client = AsyncMongoClient(
+    client = AsyncClient(
         "mongodb://user:pass@host:27017"
     )
 

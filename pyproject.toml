@@ -60,12 +60,12 @@ ci = [
     "requests",
     "types-requests",
 ]
-aws = ["pymongo[aws]>=4.11.0,<5.0.0"]
-encryption = ["pymongo[encryption]>=4.11.0,<5.0.0"]
-gssapi = ["pymongo[gssapi]>=4.11.0,<5.0.0"]
-ocsp = ["pymongo[ocsp]>=4.11.0,<5.0.0"]
-snappy = ["pymongo[snappy]>=4.11.0,<5.0.0"]
-zstd = ["pymongo[zstd]>=4.11.0,<5.0.0"]
+aws = ["async_pymongo[aws]>=0.1.11,<5.0.0"]
+encryption = ["async_pymongo[encryption]>=0.1.11,<5.0.0"]
+gssapi = ["async_pymongo[gssapi]>=0.1.11,<5.0.0"]
+ocsp = ["async_pymongo[ocsp]>=0.1.11,<5.0.0"]
+snappy = ["async_pymongo[snappy]>=0.1.11,<5.0.0"]
+zstd = ["async_pymongo[zstd]>=0.1.11,<5.0.0"]
 
 [project.urls]
 homepage = "https://beanie-odm.dev"

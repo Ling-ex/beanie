@@ -1,10 +1,10 @@
-from pymongo import AsyncMongoClient
+from async_pymongo import AsyncClient
 
 
 class DBHandler:
     @classmethod
     def set_db(cls, uri, db_name):
-        cls.client = AsyncMongoClient(uri)
+        cls.client = AsyncClient(uri)
         cls.database = cls.client[db_name]
 
     @classmethod

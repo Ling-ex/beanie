@@ -2,7 +2,7 @@ from abc import abstractmethod
 from datetime import datetime
 from typing import Any, Dict, Mapping, Optional, Union
 
-from pymongo.asynchronous.client_session import AsyncClientSession
+from async_pymongo.client_session import AsyncClientSession
 
 from beanie.odm.bulk import BulkWriter
 from beanie.odm.fields import ExpressionField
@@ -53,7 +53,7 @@ class UpdateMethods:
 
         :param expression: Dict[Union[ExpressionField, str, Any], Any] - keys and
         values to set
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - bulk writer
         :return: self
         """
@@ -74,7 +74,7 @@ class UpdateMethods:
         Uses [CurrentDate operator](operators/update.md#currentdate)
 
         :param expression: Dict[Union[datetime, ExpressionField, str], Any]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - bulk writer
         :return: self
         """
@@ -109,7 +109,7 @@ class UpdateMethods:
         Uses [Inc operator](operators/update.md#inc)
 
         :param expression: Dict[Union[ExpressionField, float, int, str], Any]
-        :param session: Optional[AsyncClientSession] - pymongo session
+        :param session: Optional[AsyncClientSession] - async_pymongo session
         :param bulk_writer: Optional[BulkWriter] - bulk writer
         :return: self
         """
